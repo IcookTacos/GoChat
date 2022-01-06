@@ -1,2 +1,3 @@
 # GoChat
-I try to make a Client/Server chat application in Go for learning purposes
+
+A client/server chat application developed with Go for learning purposes
