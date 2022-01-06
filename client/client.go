@@ -2,6 +2,10 @@ package main
 
 import "fmt"
 
+func send(message string) {
+	fmt.Println("Sending...")
+}
+
 func main() {
-	fmt.Println("Testing...")
+	send("Hello World")
 }
