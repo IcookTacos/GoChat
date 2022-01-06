@@ -7,11 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func helloWorld() {
+func HelloWorld() {
 	fmt.Println("Hello World!")
 }
 
-func ping() {
+func Ping() {
 	router := gin.Default()
 	router.GET("/user/:name", func(c *gin.Context) {
 		name := c.Param("name")
