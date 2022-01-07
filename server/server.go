@@ -10,6 +10,6 @@ func InitializeServer() {
 	fmt.Printf("Initializing server on %d \n", port)
 }
 
-func send(user string, message string) {
-	fmt.Println(message)
+func Send(userName string, message string) {
+	fmt.Printf("%s:%s", userName, message)
 }
