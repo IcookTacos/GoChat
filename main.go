@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/IcookTacos/GoChat/server"
+	"github.com/IcookTacos/GoChat/client"
 )
 
 func main() {
-	server.HelloWorld()
+	client.SetupClient()
 }

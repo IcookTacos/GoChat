@@ -2,20 +2,14 @@ package server
 
 import (
 	"fmt"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
-func HelloWorld() {
-	fmt.Println("Hello World!")
+var port int = 8080
+
+func InitializeServer() {
+	fmt.Printf("Initializing server on %d \n", port)
 }
 
-func Ping() {
-	router := gin.Default()
-	router.GET("/user/:name", func(c *gin.Context) {
-		name := c.Param("name")
-		c.String(http.StatusOK, "Hello %s", name)
-	})
-
+func send(user string, message string) {
+	fmt.Println(message)
 }
