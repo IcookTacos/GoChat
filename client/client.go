@@ -1,19 +1,38 @@
-package client
+package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"net"
+	"os"
+)
 
-type User struct {
-	name string
-}
+const ADDRESS = "localhost"
+const PORT = "8080"
 
-func SetupClient() {
-	fmt.Println("Setting up clinet...")
-	//reader := bufio.NewReader(os.Stdin)
-	//server.InitializeServer()
-	//fmt.Print("Please enter your name: ")
-	//name, _ := reader.ReadString('p')
-	//user := User{name}
-	//fmt.Printf("Welcome %s ", user.name)
-	//message, _ := reader.ReadString('\n')
-	//server.Send(user.name, message)
+var port string = "8080"
+var address string = "localhost:8080"
+
+func main() {
+
+	connection, err := net.Dial("tcp", address)
+	if err != nil {
+		log.Fatal("Could not connect to %v", address)
+		log.Fatal("Error: %v", err)
+		return
+	}
+
+	log.Printf("Connection: ", connection)
+
+	for {
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print(">> ")
+		text, _ := reader.ReadString('\n')
+		fmt.Fprint(connection, text+"\n")
+
+		message, _ := bufio.NewReader(connection).ReadString('\n')
+		fmt.Print("> " + message)
+	}
+
 }
