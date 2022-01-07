@@ -2,14 +2,16 @@ package server
 
 import (
 	"fmt"
+	"net/http"
 )
 
-var port int = 8080
+const PORT = 8080
 
 func InitializeServer() {
-	fmt.Printf("Initializing server on %d \n", port)
+	http.HandleFunc("/", Send)
+	http.ListenAndServe(":8080", nil)
 }
 
-func Send(userName string, message string) {
-	fmt.Printf("%s:%s", userName, message)
+func Send(writer http.ResponseWriter, request *http.Request) {
+	fmt.Fprintf(writer, "text %s", request.URL.Path[1:])
 }
