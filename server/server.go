@@ -10,7 +10,7 @@ import (
 
 var PORT string
 
-const BUFFER_LENGTH = 50
+const BUFFER_LENGTH = 1024
 
 var connectedClients []net.Conn
 
@@ -28,8 +28,7 @@ func main() {
 	log.Printf("listening on port %v", PORT)
 	listener, err := net.Listen("tcp", ":"+PORT)
 	if err != nil {
-		log.Fatal("Cannot listen on port")
-		log.Fatal("Error: %s", err)
+		log.Fatal("Could not listen on port")
 		return
 	}
 	defer listener.Close()
@@ -37,32 +36,37 @@ func main() {
 		connection, err := listener.Accept()
 		if err != nil {
 			log.Fatal("Could not accept connection")
-			log.Fatal("Error: %s", err)
 			return
 		}
 		go handleConnection(connection)
-		buffer := make([]byte, BUFFER_LENGTH)
-		message, err := connection.Read(buffer)
-		log.Println(string(message))
-
 	}
 }
 
 func handleConnection(connection net.Conn) {
 	defer connection.Close()
 	connectedClients = append(connectedClients, connection)
-	log.Printf("Connection accepted: %v", connection.LocalAddr())
-	printConnections(connectedClients)
+	log.Printf("Connection accepted: %v", connection.RemoteAddr())
 	_, err := io.Copy(connection, connection)
 	if err == io.EOF {
 		log.Printf("Recieved EOF. Client dissconnected")
 		return
 	} else if err != nil {
 		log.Fatal("copy error")
-		log.Fatal("Error: %s", err)
 	}
-
 }
+
+//func listenToConnections() {
+//buffer := make([]byte, BUFFER_LENGTH)
+//for _, connection := range connectedClients {
+//n, err := connection.Read(buffer)
+//if err != nil {
+//log.Printf("Could not recieve from %v", connection.LocalAddr())
+//return
+//}
+//message := string(buffer[:n])
+//fmt.Println(message)
+//}
+//}
 
 func printConnections(s []net.Conn) {
 	log.Printf("connections: %d", len(s))

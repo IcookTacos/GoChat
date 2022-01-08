@@ -6,13 +6,23 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 )
-
-const ADDRESS = "localhost"
-const PORT = "8080"
 
 var port string = "8080"
 var address string = "localhost:8080"
+var userName string
+
+func init() {
+	fmt.Println("=======================================")
+	fmt.Println("	Welcome to GoChat!					")
+	fmt.Println("=======================================\n")
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter your username: ")
+	userName, _ = reader.ReadString('\n')
+	// Removing newline from userName makes formatting easier
+	userName = strings.TrimSuffix(userName, "\n")
+}
 
 func main() {
 
@@ -23,19 +33,21 @@ func main() {
 		return
 	}
 
-	log.Printf("Connection: ", connection)
+	log.Printf("Sucesfully connected to %v, welcome %v ", address, userName)
 
 	for {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print(">> ")
 		text, _ := reader.ReadString('\n')
-
-		connection.Write([]byte(text))
-
-		//fmt.Fprint(connection, text+"\n")
-
-		//message, _ := bufio.NewReader(connection).ReadString('\n')
-		//fmt.Print("> " + message)
+		sendMessageToServer(text, connection)
 	}
+}
+
+func sendMessageToServer(text string, connection net.Conn) {
+	buffer := []byte(text)
+	connection.Write(buffer)
+}
+
+func recieveMessageFromServer() {
 
 }
