@@ -10,6 +10,10 @@ import (
 
 var PORT string
 
+const BUFFER_LENGTH = 50
+
+var connectedClients []net.Conn
+
 func init() {
 	flag.StringVar(&PORT, "p", os.Getenv("PORT"), "The default port to listen on")
 	flag.Parse()
@@ -29,7 +33,6 @@ func main() {
 		return
 	}
 	defer listener.Close()
-
 	for {
 		connection, err := listener.Accept()
 		if err != nil {
@@ -38,12 +41,18 @@ func main() {
 			return
 		}
 		go handleConnection(connection)
+		buffer := make([]byte, BUFFER_LENGTH)
+		message, err := connection.Read(buffer)
+		log.Println(string(message))
+
 	}
 }
 
 func handleConnection(connection net.Conn) {
 	defer connection.Close()
-	log.Printf("Connection accepted %v", connection.RemoteAddr())
+	connectedClients = append(connectedClients, connection)
+	log.Printf("Connection accepted: %v", connection.LocalAddr())
+	printConnections(connectedClients)
 	_, err := io.Copy(connection, connection)
 	if err == io.EOF {
 		log.Printf("Recieved EOF. Client dissconnected")
@@ -53,4 +62,9 @@ func handleConnection(connection net.Conn) {
 		log.Fatal("Error: %s", err)
 	}
 
+}
+
+func printConnections(s []net.Conn) {
+	log.Printf("connections: %d", len(s))
+	log.Print(s)
 }

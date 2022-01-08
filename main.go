@@ -1,11 +1,11 @@
 package main
 
-import (
-	"github.com/IcookTacos/GoChat/client"
-	"github.com/IcookTacos/GoChat/server"
-)
+import "fmt"
+
+// Just saving these so I remember how to import different packages
+//"github.com/IcookTacos/GoChat/client"
+//"github.com/IcookTacos/GoChat/server"
 
 func main() {
-	client.SetupClient()
-	server.InitializeServer()
+	fmt.Println("Hello World!")
 }

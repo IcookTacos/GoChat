@@ -29,10 +29,13 @@ func main() {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print(">> ")
 		text, _ := reader.ReadString('\n')
-		fmt.Fprint(connection, text+"\n")
 
-		message, _ := bufio.NewReader(connection).ReadString('\n')
-		fmt.Print("> " + message)
+		connection.Write([]byte(text))
+
+		//fmt.Fprint(connection, text+"\n")
+
+		//message, _ := bufio.NewReader(connection).ReadString('\n')
+		//fmt.Print("> " + message)
 	}
 
 }
