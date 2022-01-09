@@ -1,8 +1,8 @@
 package main
 
 import (
+	"bufio"
 	"flag"
-	"io"
 	"log"
 	"net"
 	"os"
@@ -11,8 +11,6 @@ import (
 var PORT string
 
 const BUFFER_LENGTH = 1024
-
-var connectedClients []net.Conn
 
 func init() {
 	flag.StringVar(&PORT, "p", os.Getenv("PORT"), "The default port to listen on")
@@ -44,31 +42,14 @@ func main() {
 
 func handleConnection(connection net.Conn) {
 	defer connection.Close()
-	connectedClients = append(connectedClients, connection)
 	log.Printf("Connection accepted: %v", connection.RemoteAddr())
-	_, err := io.Copy(connection, connection)
-	if err == io.EOF {
-		log.Printf("Recieved EOF. Client dissconnected")
-		return
-	} else if err != nil {
-		log.Fatal("copy error")
+	clientReader := bufio.NewReader(connection)
+	for {
+		clientMessage, err := clientReader.ReadString('\n')
+		if err != nil {
+			log.Print("Client disconnected")
+			return
+		}
+		log.Printf("Client message: %v", clientMessage)
 	}
-}
-
-//func listenToConnections() {
-//buffer := make([]byte, BUFFER_LENGTH)
-//for _, connection := range connectedClients {
-//n, err := connection.Read(buffer)
-//if err != nil {
-//log.Printf("Could not recieve from %v", connection.LocalAddr())
-//return
-//}
-//message := string(buffer[:n])
-//fmt.Println(message)
-//}
-//}
-
-func printConnections(s []net.Conn) {
-	log.Printf("connections: %d", len(s))
-	log.Print(s)
 }
