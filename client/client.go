@@ -8,11 +8,10 @@ import (
 	"os"
 )
 
-var port string = "8080"
-var address string = "localhost:8080"
+var address string = "172.31.81.78:2309"
 
 func main() {
-
+	fmt.Printf("Connecting to %v ... \n",address)
 	connection, err := net.Dial("tcp", address)
 	clientReader := bufio.NewReader(os.Stdin)
 	//serverReader := bufio.NewReader(connection)

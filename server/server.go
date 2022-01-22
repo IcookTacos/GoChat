@@ -23,12 +23,13 @@ func init() {
 }
 
 func main() {
-	log.Printf("listening on port %v", PORT)
+	log.Printf("Establishing connection...")
 	listener, err := net.Listen("tcp", ":"+PORT)
 	if err != nil {
-		log.Fatal("Could not listen on port")
+		log.Fatal("Could not listen on port" + PORT)
 		return
 	}
+	log.Printf("listening on port %v", PORT)
 	defer listener.Close()
 	for {
 		connection, err := listener.Accept()
